@@ -8,7 +8,7 @@ This repository provides a modular environment for robotic control and simulatio
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/phosphobot_genesis.git
+git clone https://github.com/Nishanth-CNCPMC/ChallengesGenesis.git
 cd phosphobot_genesis
 ```
 
