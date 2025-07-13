@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Axibo Control Center</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #1e1e1e;
+      color: white;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      display: flex;
+      gap: 50px;
+      align-items: flex-start;
+    }
+
+    .main-container {
+      padding: 30px;
+    }
+
+    h2 {
+      color: white;
+    }
+
+    form {
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 8px;
+      width: 300px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.05);
+    }
+
+    input[type="number"], input[type="checkbox"] {
+      margin-bottom: 10px;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      border: none;
+      border-radius: 4px;
+    }
+
+    button {
+      margin-right: 10px;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 4px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .result {
+      margin-top: 20px;
+      background: #333;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: #2e2e2e;
+      padding: 30px 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      margin-top: 100px; 
+    }
+
+    .sidebar h3 {
+      margin-top: 0;
+      color: white;
+      text-align: center;
+    }
+
+    .sidebar label {
+      display: block;
+      margin: 10px 0;
+    }
+
+    .sidebar .control-buttons {
+      margin-top: 20px;
+    }
+
+    .sidebar .control-buttons button {
+      background-color: #007acc;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .sidebar .control-buttons button:hover {
+      background-color: #005f99;
+    }
+
+    .status {
+      margin-top: 15px;
+      background-color: #333;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="main-container">
+      <h2>Axibo Control Center</h2>
+      <form action="/submit" method="post">
+        <input type="number" name="x" step="0.01" placeholder="X coordinate (m)" required>
+        <input type="number" name="y" step="0.01" placeholder="Y coordinate (m)" required>
+        <input type="number" name="z" step="0.01" placeholder="Z coordinate (m)" required>
+        <br>
+        <button type="submit" name="action" value="simulate">Simulate</button>
+        <button type="submit" name="action" value="send">Send Robot</button>
+      </form>
+
+      {% if result %}
+      <div class="result">
+        <h4>Result:</h4>
+        <pre>{{ result }}</pre>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="sidebar">
+      <h3>Challenges</h3>
+      <label><input type="checkbox" name="challenge" value="Simulation Setup"> Simulation Setup</label>
+      <label><input type="checkbox" name="challenge" value="Real World Joint Integration"> Real World Joint Integration</label>
+      <label><input type="checkbox" name="challenge" value="Cartesian XYZ Control"> Cartesian XYZ Control</label>
+
+      <div class="control-buttons">
+        <button onclick="launchSelected()">Launch Selected</button>
+        <button onclick="terminateRunning()">Terminate</button>
+      </div>
+
+      <div class="status" id="status">Status: Idle</div>
+    </div>
+  </div>
+<script>
+  let currentChallenge = null;
+
+  async function launchSelected() {
+    const selected = Array.from(document.querySelectorAll('input[name="challenge"]:checked'))
+                          .map(el => el.value);
+    const statusBox = document.getElementById("status");
+    const launchBtn = document.querySelector('.control-buttons button:nth-child(1)');
+    const terminateBtn = document.querySelector('.control-buttons button:nth-child(2)');
+
+    if (selected.length === 0) {
+      alert("Please select at least one challenge.");
+      return;
+    }
+
+    if (currentChallenge) {
+      alert("Another challenge is already running. Please terminate it first.");
+      return;
+    }
+
+    launchBtn.disabled = true;
+    terminateBtn.disabled = true;
+
+    if (selected.includes("Simulation Setup")) {
+      statusBox.textContent = "Launching: Simulation Setup...";
+      const response = await fetch("/start_challenge1", { method: "POST" });
+      const data = await response.json();
+      if (data.status === "started") {
+        currentChallenge = "Simulation Setup";
+        statusBox.textContent = `${currentChallenge} running.`;
+      } else {
+        statusBox.textContent = "Error: " + data.message;
+      }
+    } else if (selected.includes("Real World Joint Integration")) {
+      statusBox.textContent = "Launching: Real World Joint Integration...";
+      const response = await fetch("/start_challenge2", { method: "POST" });
+      const data = await response.json();
+      if (data.status === "started") {
+        currentChallenge = "Real World Joint Integration";
+        statusBox.textContent = `${currentChallenge} running.`;
+      } else {
+        statusBox.textContent = "Error: " + data.message;
+      }
+    }
+
+    launchBtn.disabled = false;
+    terminateBtn.disabled = false;
+  }
+
+  async function terminateRunning() {
+    const statusBox = document.getElementById("status");
+    const launchBtn = document.querySelector('.control-buttons button:nth-child(1)');
+    const terminateBtn = document.querySelector('.control-buttons button:nth-child(2)');
+
+    if (!currentChallenge) {
+      alert("No challenge is currently running.");
+      return;
+    }
+
+    terminateBtn.disabled = true;
+
+    if (currentChallenge === "Simulation Setup") {
+      const response = await fetch("/stop_challenge1", { method: "POST" });
+      const data = await response.json();
+      if (data.status === "stopped") {
+        statusBox.textContent = "Simulation Setup stopped.";
+        currentChallenge = null;
+      } else {
+        statusBox.textContent = "Error: " + data.message;
+      }
+    } else if (currentChallenge === "Real World Joint Integration") {
+      const response = await fetch("/stop_challenge2", { method: "POST" });
+      const data = await response.json();
+      if (data.status === "stopped") {
+        statusBox.textContent = "Real World Joint Integration stopped.";
+        currentChallenge = null;
+      } else {
+        statusBox.textContent = "Error: " + data.message;
+      }
+    }
+
+    launchBtn.disabled = false;
+    terminateBtn.disabled = false;
+  }
+</script>
+
+
+</body>
+</html>
+
