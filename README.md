@@ -32,7 +32,7 @@ Once inside the `torch-env`, launch the backend server:
 ```bash
 uvicorn server.main:app --reload
 ```
-
+<img src="controlcenter'.png" alt="Axibo Control Center UI" style="width:80%; margin-top:10px;"/>
 Then visit:
 
 - **http://127.0.0.1:8000** – Main API server
