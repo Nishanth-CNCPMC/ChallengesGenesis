@@ -1,6 +1,6 @@
 # Phosphobot Genesis Control Suite
 
-This repository provides a modular environment for robotic control and simulation using real-time servo integration, Genesis simulation, and ZMQ-based messaging. It was originally developed as a testbed and is now shared for replication, analysis, and further development.
+This repository provides a modular environment for robotic control and simulation using real-time servo integration, Genesis simulation, and ZMQ-based messaging. 
 
 ---
 
