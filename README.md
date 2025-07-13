@@ -48,8 +48,8 @@ You can launch specific challenges either through API calls or by interacting wi
 **Location:** `launch/challenge1.py`
 
 - Launches a full Genesis simulation
-- No hardware required
-- Meant for motion planning and kinematic testing
+- Load the URDF for the SO101 arm
+- Expose Joints for real time ineractions with FK
 
 ### 🔹 Challenge 2: Real-World Joint Integration
 **Location:** `launch/challenge2.py`
@@ -67,9 +67,9 @@ Make sure your servos are:
 - Powered on
 
 ### 🔹 Challenge 3: Under Development
-There is no official implementation for Challenge 3. It was part of an earlier prototype phase and was **not finalized**.
+There is no official implementation for Challenge 3. It is a part of an earlier prototype phase and is **not finalized**.
 
-- You can explore parts of the implementation in `misc/` and `zmq_control/`
+- You can explore parts of the implementation in `simulations/run_simulations_ik.py`, `misc/` and `zmq_control/`
 - This challenge is **intended for manual interpretation and assessment** based on the existing codebase
 - No automated or structured entry point exists for this challenge
 
@@ -118,16 +118,7 @@ Returns:
 
 ## 🧑‍🔬 Acknowledgments
 
-This project was originally built as part of a technical test environment. Some modules may contain placeholder or test logic. Challenge 3 is intentionally left unfinished to allow open-ended interpretation and evaluation.
+This project was originally built as part of a technical test environment.
 
 ---
 
-## 📜 License
-
-MIT License (or add a custom license if applicable)
-
----
-
-## ✍️ Contributing
-
-If you find this helpful and want to improve or complete Challenge 3, feel free to fork, contribute, or open a pull request.
