@@ -69,7 +69,7 @@ Make sure your servos are:
 ### 🔹 Challenge 3: Under Development
 There is no official implementation for Challenge 3. It is a part of an earlier prototype phase and is **not finalized**.
 
-- You can explore parts of the implementation in `simulations/run_simulations_ik.py`, `misc/` and `zmq_control/`
+- You can explore parts of the implementation in `simulations/run_simulations_ik.py`, `misc/` and `zmq_control/`. It uses ompl library for motion planning.
 - This challenge is **intended for manual interpretation and assessment** based on the existing codebase
 - No automated or structured entry point exists for this challenge
 
