@@ -6,19 +6,7 @@ import genesis as gs
 import threading
 from zmq_control.listener import start_listener
 os.environ["TI_LOG_LEVEL"] = "error" 
-
-gs.init(backend=gs.gpu, debug = False, logging_level = None, logger_verbose_time = False)
-scene = gs.Scene(show_viewer=True)
-scene.viewer.show_fps = False
-plane = scene.add_entity(gs.morphs.Plane())
-so100 = scene.add_entity(
-    gs.morphs.URDF(
-        file="./urdf/so-100.urdf",
-        fixed=True    
-    )
-)
-
-scene.build()
+from simulation.sim_environment import scene, so100
 
 def print_gripper_tip():
     dofs = so100.get_dofs_position()

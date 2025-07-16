@@ -15,18 +15,7 @@ def start_challenge_one():
     sim_proc = subprocess.Popen(["python3", sim_path], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     challenge_one_procs["simulation"] = sim_proc
     print("[CHALLENGE 1] run_simulation.py started with PID", sim_proc.pid)
-
-    # Monitor for successful init (custom marker, can be changed to a file check or socket handshake)
-    def wait_for_sim_ready():
-        print("[CHALLENGE 1] Waiting for simulation to initialize...")
-        for line in sim_proc.stdout:
-            print("[SIM OUT]", line.strip())
-            if "[Genesis]" in line and "Running at" in line:
-                print("[CHALLENGE 1] Simulation is ready. Launching sender.py")
-                launch_sender()
-                break
-
-    threading.Thread(target=wait_for_sim_ready, daemon=True).start()
+    launch_sender()
 
 def launch_sender():
     sender_path = os.path.join("zmq_control", "sender.py")
@@ -56,13 +45,4 @@ def stop_challenge_one():
 
     challenge_one_procs.clear()
     print("[CHALLENGE 1] All processes stopped.")
-
-# Optional if you want to test directly
-if __name__ == "__main__":
-    try:
-        start_challenge_one()
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        stop_challenge_one()
 

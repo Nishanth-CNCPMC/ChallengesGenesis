@@ -113,29 +113,9 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="main-container">
-      <h2>Axibo Control Center</h2>
-      <form action="/submit" method="post">
-        <input type="number" name="x" step="0.01" placeholder="X coordinate (m)" required>
-        <input type="number" name="y" step="0.01" placeholder="Y coordinate (m)" required>
-        <input type="number" name="z" step="0.01" placeholder="Z coordinate (m)" required>
-        <br>
-        <button type="submit" name="action" value="simulate">Simulate</button>
-        <button type="submit" name="action" value="send">Send Robot</button>
-      </form>
-
-      {% if result %}
-      <div class="result">
-        <h4>Result:</h4>
-        <pre>{{ result }}</pre>
-      </div>
-      {% endif %}
-    </div>
-
     <div class="sidebar">
       <h3>Challenges</h3>
-      <label><input type="checkbox" name="challenge" value="Simulation Setup"> Simulation Setup</label>
+      <label><input type="checkbox" name="challenge" value="Simulation Setup"> Simulation Setup and FK</label>
       <label><input type="checkbox" name="challenge" value="Real World Joint Integration"> Real World Joint Integration</label>
       <label><input type="checkbox" name="challenge" value="Cartesian XYZ Control"> Cartesian XYZ Control</label>
 
@@ -191,7 +171,18 @@
         statusBox.textContent = "Error: " + data.message;
       }
     }
-
+    
+    else if (selected.includes("Cartesian XYZ Control")) {
+      statusBox.textContent = "Launching: Cartesian XYZ Control...";
+      const response = await fetch("/start_challenge3", { method: "POST" });
+      const data = await response.json();
+      if (data.status === "started") {
+        currentChallenge = "Cartesian XYZ Control";
+        statusBox.textContent = `${currentChallenge} running.`;
+      } else {
+        statusBox.textContent = "Error: " + data.message;
+      }
+    }
     launchBtn.disabled = false;
     terminateBtn.disabled = false;
   }
@@ -222,6 +213,17 @@
       const data = await response.json();
       if (data.status === "stopped") {
         statusBox.textContent = "Real World Joint Integration stopped.";
+        currentChallenge = null;
+      } else {
+        statusBox.textContent = "Error: " + data.message;
+      }
+    }
+    
+    else if (currentChallenge === "Cartesian XYZ Control") {
+      const response = await fetch("/stop_challenge3", { method: "POST" });
+      const data = await response.json();
+      if (data.status === "stopped") {
+        statusBox.textContent = "Cartesian XYZ Control stopped.";
         currentChallenge = null;
       } else {
         statusBox.textContent = "Error: " + data.message;

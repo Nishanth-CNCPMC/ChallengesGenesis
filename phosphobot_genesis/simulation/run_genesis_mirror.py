@@ -5,7 +5,7 @@ import genesis as gs
 import threading
 from zmq_control.robot_listener import robot_state_listener
 from zmq_control.shared_state import shared_joint_state
-#"Jaw":          {"min": 1941, "max": 3403}
+from simulation.sim_environment import scene, so100
 import numpy as np
 joint_config = {
     "Rotation":     {"min": 740,  "max": 3455},
@@ -15,19 +15,6 @@ joint_config = {
     "Wrist_Roll":   {"min": 0,    "max": 4096},
     "Jaw":          {"min": 400, "max": 3403},
 }
-
-gs.init(backend=gs.cpu)
-scene = gs.Scene(show_viewer=True)
-scene.viewer.show_fps = False
-
-plane = scene.add_entity(gs.morphs.Plane())
-robot = scene.add_entity(
-    gs.morphs.URDF(
-        file="./urdf/so-100.urdf",
-        fixed=True    
-    )
-)
-scene.build()
 
 jnt_names = ['Rotation', 'Pitch', 'Elbow', 'Wrist_Pitch', 'Wrist_Roll', 'Jaw']
 dofs_idx = [robot.get_joint(name).dof_idx_local for name in jnt_names]

@@ -28,6 +28,8 @@ This will install all required dependencies including PyTorch and other scientif
 
 ## 🖥️ Running the FastAPI Server
 
+Make sure to install pyserial, python-multipart and check for any dependency errors while running the fast api server.
+
 Once inside the `torch-env`, launch the backend server:
 ```bash
 uvicorn server.main:app --reload
@@ -66,12 +68,14 @@ Make sure your servos are:
 - Assigned correct IDs (1–6)
 - Powered on
 
-### 🔹 Challenge 3: Under Development
-There is no official implementation for Challenge 3. It is a part of an earlier prototype phase and is **not finalized**.
+### 🔹 Challenge 3: Inverse Kinematics using OMPL
+**Location:** `launch/challenge3.py`
 
-- You can explore parts of the implementation in `simulations/run_simulations_ik.py`, `misc/` and `zmq_control/`. It uses ompl library for motion planning.
-- This challenge is **intended for manual interpretation and assessment** based on the existing codebase
-- No automated or structured entry point exists for this challenge
+- Install OMPL (Motion Planner Dependency) by following another repo of mine (https://github.com/Nishanth-CNCPMC/OMPL_Genesis_Installation.git)
+- Runs simulation/run_simulation_ik.py to perform oscillating end-effector motion using inverse kinematics
+- Moves the robot's end effector back and forth along the X-axis by 5 cm starting from 0.00, -0.30, 0.02
+- Continuously toggles between two X positions using the Fixed_Jaw link
+- Simulated motion uses Genesis physics and mimics real-world constraints
 
 ---
 
