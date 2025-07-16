@@ -53,6 +53,8 @@ You can launch specific challenges either through API calls or by interacting wi
 - Load the URDF for the SO101 arm
 - Expose Joints for real time ineractions with FK
 
+![Challenge 1](./assets/challenge1.gif)
+
 ### 🔹 Challenge 2: Real-World Joint Integration
 **Location:** `launch/challenge2.py`
 
@@ -76,6 +78,8 @@ Make sure your servos are:
 - Moves the robot's end effector back and forth along the X-axis by 5 cm starting from 0.00, -0.30, 0.02
 - Continuously toggles between two X positions using the Fixed_Jaw link
 - Simulated motion uses Genesis physics and mimics real-world constraints
+
+![Challenge 3](./assets/challenge3.gif)
 
 ---
 
